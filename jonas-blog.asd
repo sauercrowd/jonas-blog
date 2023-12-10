@@ -5,5 +5,6 @@
   :depends-on (:woo :local-time :cl-ppcre)
   :components ((:module "src"
                 :components
-                ((:file "jonas-blog"))))
+                ((:file "jonas-blog")
+                 (:file "markdown"))))
   :description "")
