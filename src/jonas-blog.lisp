@@ -66,40 +66,6 @@
 		     (script '(:src "https://cdn.tailwindcss.com") ))
 		    (body (generate-body)))))
 
-; (defvar *app* (make-instance 'ningle:app))
-					; (setf (ningle:route *app* "/") #'handle-root)
-
-;(defvar *app*
-;          (lambda (env)
-;           '(200 (:content-type "text/plain") ("Hello, Clack!"))))
-
-
-;(hunchentoot:define-easy-handler (root-route :uri "/") (name)
-;  (setf (hunchentoot:content-type*) "text/plain")
-;  (handle-root))
-
-;(defun main()
-;  (let ((server (make-instance 'hunchentoot:easy-acceptor :port 8080)))
-;    (hunchentoot:start server)))
-
-
-;(defun main()
-;  (let ((server (clack:clackup *app* :address "0.0.0.0" :port 8080)))
-;    (handler-case (bordeaux-threads:join-thread (find-if (lambda (th)
-;							   (search "hunchentoot" (bordeaux-threads:thread-name th)))
-;							 (bordeaux-threads:all-threads)))
-;      (#+sbcl sb-sys:interactive-interrupt
-;       () (progn
-;	    (format *error-output* "Aborting.~&")
-;	    (clack:stop server)
-;	    (uiop:quit)))
-;      (error (c) (format t "Woops, an unknown error occured:~&~a~&" c)))))
-
-;; (main)
-
-;(defun main ()
-					;    (clack:clackup *app* :address "0.0.0.0" :server :woo :port 8080))
-
 (defvar *app*
   (lambda (env)
     (declare (ignore env))
