@@ -1,6 +1,8 @@
-FROM alpine:3.18 as builder
+#FROM alpine:3.19.0
+FROM ubuntu:24.04
 
-RUN apk add sbcl curl
+RUN apt update && apt install sbcl curl libev-dev gcc -y
+#RUN apk add sbcl curl
 
 COPY . /root/common-lisp/jonas_blog/
 WORKDIR  /root/common-lisp/jonas_blog/
@@ -11,4 +13,4 @@ RUN sbcl --load quicklisp.lisp  \
         --eval '(ql:quickload "jonas-blog")' \
         --eval "(quit)"
 
-CMD ["sbcl", "--load", "/root/quicklisp/setup.lisp", "--load", "./main.lisp"]
+CMD ["sbcl", "--non-interactive", "--load", "/root/quicklisp/setup.lisp", "--load", "./main.lisp"]

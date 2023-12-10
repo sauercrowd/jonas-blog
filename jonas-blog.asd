@@ -2,7 +2,7 @@
   :version "0.1.0"
   :author "Jonas Otten"
   :license ""
-  :depends-on ("ningle" "clack" "hunchentoot" "bordeaux-threads")
+  :depends-on (:clack)
   :components ((:module "src"
                 :components
                 ((:file "jonas-blog"))))
