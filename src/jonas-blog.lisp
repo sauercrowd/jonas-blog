@@ -40,8 +40,15 @@
 
 
 
+(defun sidebar-show-posts ()
+  (mapcan (lambda (post)
+	    (a (list
+		:class "underline capitalize"
+		:href (format nil "/~a" (path post)))
+	       (title post)))
+	  (get-posts)))
 
-(defun generate-body ()
+(defun generate-body (inner)
   (div '(:class "flex w-screen h-screen")
        (div
 	'(:class "bg-slate-300 w-64 items-center flex flex-col p-2 pt-4 gap-2")
@@ -49,11 +56,12 @@
 	(h1 "Jonas Otten")
 	(p '(:class "text-sm w-48")
 	 "Software engineer at "
-	    (a '(:href "https://loxoapp.com") "Loxo")
-	  " previously at " (a '(:href "https://palantir.com") "Palantir")))
-       (div "hello this is j blog")))
+	    (a '(:class "underline" :href "https://loxoapp.com") "Loxo")
+	    " previously at " (a '(:class "underline" :href "https://palantir.com") "Palantir"))
+	(sidebar-show-posts))
+       inner))
 
-(defun handle-root (&rest args)
+(defun get-blog (inner)
       (concatenate 'string
 		   "<!doctype html>"
 		   (html
@@ -64,11 +72,19 @@
 			       :integrity "sha384-QFjmbokDn2DjBjq+fM+8LUIVrAgqcNW2s0PjAxHETgRn9l4fvX31ZxDxvwQnyMOX"
 			       :crossorigin "anonymous"))
 		     (script '(:src "https://cdn.tailwindcss.com") ))
-		    (body (generate-body)))))
+		    (body (generate-body inner)))))
+
+(defun main-handler (env)
+  (if (string= "/" (getf env :path-info))
+      (list 200 '(:content-type "text/html") (list (get-blog "")))
+      '(404 '(:content-type "text/plain") ("Not found"))))
+
+;(defvar *app* (lambda (env)
+;  (list 200 '(:content-type "text/html")
+					;	(list (handle-root)))))
 
 (defvar *app* (lambda (env)
-  (list 200 '(:content-type "text/html")
-	(list (handle-root)))))
+		(main-handler env)))
 
 (defun main ()
   (woo:run *app* :port 8080 :address "0.0.0.0"))
