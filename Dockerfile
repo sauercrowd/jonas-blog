@@ -1,8 +1,8 @@
-FROM alpine:3.19.0
-# FROM ubuntu:24.04
+# FROM alpine:3.19.0
+FROM ubuntu:24.04
 
-#RUN apt update && apt install sbcl curl libev-dev gcc -y
-RUN apk add sbcl curl
+RUN apt update && apt install sbcl curl libev-dev gcc -y
+#RUN apk add sbcl curl
 
 COPY . /root/common-lisp/jonas_blog/
 WORKDIR  /root/common-lisp/jonas_blog/

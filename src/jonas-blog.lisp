@@ -1,5 +1,5 @@
 (defpackage jonas-blog
-  (:use :cl :ningle :clack :bordeaux-threads))
+  (:use :cl :woo))
 
 (in-package :jonas-blog)
 
@@ -66,20 +66,27 @@
 		     (script '(:src "https://cdn.tailwindcss.com") ))
 		    (body (generate-body)))))
 
+(defvar *app* (lambda (env)
+  (list 200 '(:content-type "text/html")
+	(list (handle-root)))))
 
-(defvar *app* (make-instance 'ningle:app))
-
-(setf (ningle:route *app* "/") #'handle-root)
-
-(defun main()
-  (let ((server (clack:clackup *app* :address "0.0.0.0" :port 8080)))
-    (handler-case (bordeaux-threads:join-thread (find-if (lambda (th)
-							   (search "hunchentoot" (bordeaux-threads:thread-name th)))
-							 (bordeaux-threads:all-threads)))
-      ;; Catch a user's C-c
-      (#+sbcl sb-sys:interactive-interrupt
-       () (progn
-	    (format *error-output* "Aborting.~&")
-	    (clack:stop server)
-	    (uiop:quit)))
-      (error (c) (format t "Woops, an unknown error occured:~&~a~&" c)))))
+(defun main ()
+  (woo:run *app* :port 8080 :address "0.0.0.0"))
+;
+;
+;(defvar *app* (make-instance 'ningle:app))
+;
+;(setf (ningle:route *app* "/") #'handle-root)
+;
+;(defun main()
+;  (let ((server (clack:clackup *app* :address "0.0.0.0" :port 8080)))
+;    (handler-case (bordeaux-threads:join-thread (find-if (lambda (th)
+;							   (search "hunchentoot" (bordeaux-threads:thread-name th)))
+;							 (bordeaux-threads:all-threads)))
+;      ;; Catch a user's C-c
+;      (#+sbcl sb-sys:interactive-interrupt
+;       () (progn
+;	    (format *error-output* "Aborting.~&")
+;	    (clack:stop server)
+;	    (uiop:quit)))
+;      (error (c) (format t "Woops, an unknown error occured:~&~a~&" c)))))
