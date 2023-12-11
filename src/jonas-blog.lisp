@@ -74,8 +74,6 @@
 		     (script '(:src "https://cdn.tailwindcss.com") ))
 		    (body (generate-body inner)))))
 
-(defvar *posts-table* nil)
-(setf *posts-table* (get-posts-table))
 
 (defun main-handler (env)
   (let ((req-path  (getf env :path-info)))

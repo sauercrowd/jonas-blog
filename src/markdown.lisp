@@ -33,16 +33,20 @@
 		   :title (cl-ppcre:regex-replace-all "-" filename-without-ext " ")
 		   :date (local-time:parse-timestring (car splitted))
 		   :path filename-without-ext
-		   :content (with-open-file (stream filename)
-			      (loop for line = (read-line stream nil)
-				    while line
-				    collect line)))))
+		   :content (format nil "~{~A~^~% ~}"
+				    (with-open-file (stream filename)
+				      (loop for line = (read-line stream nil)
+					while line
+					    collect line))))))
 
 (defun get-posts ()
   (mapcar #'load-post (get-post-files)))
 
 (defun get-posts-table ()
-  (let ((posts-table (make-hash-table)))
+  (let ((posts-table (make-hash-table :test 'equal)))
     (dolist (post (get-posts))
-      (setf (gethash (path post)) post))
-    (return posts-table)))
+      (setf (gethash (format nil "/~a" (path post)) posts-table) post))
+    posts-table))
+
+(defvar *posts-table* nil)
+(setf *posts-table* (get-posts-table))
