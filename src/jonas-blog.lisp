@@ -74,7 +74,6 @@
 		     (script '(:src "https://cdn.tailwindcss.com") ))
 		    (body (generate-body inner)))))
 
-
 (defun main-handler (env)
   (let ((req-path  (getf env :path-info)))
     (print req-path)
