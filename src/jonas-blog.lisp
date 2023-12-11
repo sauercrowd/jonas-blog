@@ -51,7 +51,7 @@
 (defun generate-body (inner)
   (div '(:class "flex w-screen h-screen")
        (div
-	'(:class "bg-slate-300 w-64 items-center flex flex-col p-2 pt-4 gap-2")
+	'(:class "bg-slate-800 w-64 items-center flex flex-col p-2 pt-4 gap-2")
 	(img '(:class "w-32 h-32 rounded-full" :src "https://avatars.githubusercontent.com/u/4764029?v=4"))
 	(h1 "Jonas Otten")
 	(p '(:class "text-sm w-48")
