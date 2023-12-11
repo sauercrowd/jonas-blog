@@ -43,7 +43,7 @@
 (defun sidebar-show-posts ()
   (mapcan (lambda (post)
 	    (a (list
-		:class "underline capitalize"
+		:class "underline"
 		:href (format nil "/~a" (path post)))
 	       (title post)))
 	  (get-posts)))
@@ -74,14 +74,20 @@
 		     (script '(:src "https://cdn.tailwindcss.com") ))
 		    (body (generate-body inner)))))
 
-(defun main-handler (env)
-  (if (string= "/" (getf env :path-info))
-      (list 200 '(:content-type "text/html") (list (get-blog "")))
-      '(404 '(:content-type "text/plain") ("Not found"))))
+(defvar *posts-table* nil)
+(setf *posts-table* (get-posts-table))
 
-;(defvar *app* (lambda (env)
-;  (list 200 '(:content-type "text/html")
-					;	(list (handle-root)))))
+(defun main-handler (env)
+  (let ((req-path  (getf env :path-info)))
+    (print req-path)
+    (if (string= "/" req-path)
+      (list 200 '(:content-type "text/html") (list (get-blog "")))
+      (let ((post (gethash req-path *posts-table*)))
+	(format t "~a ~a" post req-path)
+	(if post
+	    (list 200 '(:content-type "text/html") (list (get-blog (content post))))
+	    '(404 '(:content-type "text/plain") ("Not found")))))))
+
 
 (defvar *app* (lambda (env)
 		(main-handler env)))

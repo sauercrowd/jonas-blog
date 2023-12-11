@@ -40,3 +40,9 @@
 
 (defun get-posts ()
   (mapcar #'load-post (get-post-files)))
+
+(defun get-posts-table ()
+  (let ((posts-table (make-hash-table)))
+    (dolist (post (get-posts))
+      (setf (gethash (path post)) post))
+    (return posts-table)))
