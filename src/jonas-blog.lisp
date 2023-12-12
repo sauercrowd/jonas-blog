@@ -1,6 +1,3 @@
-(defpackage jonas-blog
-  (:use :cl :woo :local-time :cl-ppcre))
-
 (in-package :jonas-blog)
 
 (defun content-to-string (content)
@@ -49,7 +46,7 @@
 	  (get-posts)))
 
 (defun generate-body (inner)
-  (div '(:class "flex w-screen h-screen")
+  (div '(:class "flex w-screen h-screen text-white")
        (div
 	'(:class "bg-slate-800 w-64 items-center flex flex-col p-2 pt-4 gap-2")
 	(img '(:class "w-32 h-32 rounded-full" :src "https://avatars.githubusercontent.com/u/4764029?v=4"))
@@ -72,7 +69,7 @@
 			       :integrity "sha384-QFjmbokDn2DjBjq+fM+8LUIVrAgqcNW2s0PjAxHETgRn9l4fvX31ZxDxvwQnyMOX"
 			       :crossorigin "anonymous"))
 		     (script '(:src "https://cdn.tailwindcss.com") ))
-		    (body (generate-body inner)))))
+		    (body '(:class "bg-slate-700") (generate-body inner)))))
 
 (defun main-handler (env)
   (let ((req-path  (getf env :path-info)))

@@ -1,6 +1,5 @@
 (in-package :jonas-blog)
 
-
 (defun get-date-from-post-filename (filename)
   (ignore-errors
    (local-time:parse-timestring
@@ -50,3 +49,27 @@
 
 (defvar *posts-table* nil)
 (setf *posts-table* (get-posts-table))
+
+
+(defmacro -> (&rest args)
+  (reduce (lambda (acc current) `(,current ,acc))
+	  (subseq args 2)
+	  :initial-value `(,(cadr args) ,(car args))))
+
+
+(defun parse-header (content)
+  (cl-ppcre:regex-replace-all "^[ ]*(#+) (.*)"
+			      content
+			      (lambda (match &rest registers)
+				(let ((header-size (car registers))
+				      (header-content (cadr registers)))
+				  (cond ((string= header-size "#") (h1 header-content))
+					((string= header-size "##") (h2 header-content))
+					((string= header-size "###") (h3 header-content))
+					(t (b header-content)))))
+			      :simple-calls t))
+
+(defun markdown-to-html (markdown-content)
+  (-> markdown-content
+      parse-header
+      parse-paragraphs))
