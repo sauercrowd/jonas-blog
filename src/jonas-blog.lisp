@@ -33,7 +33,7 @@
      ,@(loop for tag in tag-list
 	      collect `(create-html-tag ,tag))))
 
-(create-html-tags ("h1" "h2" "h3" "html" "script" "img" "a" "head" "body" "meta" "div" "span" "p"))
+(create-html-tags ("h1" "h2" "h3" "html" "script" "img" "a" "head" "body" "meta" "div" "span" "p" "b"))
 
 
 
@@ -79,7 +79,7 @@
       (let ((post (gethash req-path *posts-table*)))
 	(format t "~a ~a" post req-path)
 	(if post
-	    (list 200 '(:content-type "text/html") (list (get-blog (content post))))
+	    (list 200 '(:content-type "text/html") (list (get-blog (markdown-to-html (content post)))))
 	    '(404 '(:content-type "text/plain") ("Not found")))))))
 
 

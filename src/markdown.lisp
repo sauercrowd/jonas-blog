@@ -63,13 +63,18 @@
 			      (lambda (match &rest registers)
 				(let ((header-size (car registers))
 				      (header-content (cadr registers)))
-				  (cond ((string= header-size "#") (h1 header-content))
-					((string= header-size "##") (h2 header-content))
-					((string= header-size "###") (h3 header-content))
+				  (cond ((string= header-size "#") (h1 '(:class "text-3xl") header-content))
+					((string= header-size "##") (h2 '(:class "text-2xl") header-content))
+					((string= header-size "###") (h3 '(:class "text-xl") header-content))
 					(t (b header-content)))))
 			      :simple-calls t))
 
+
+(defun parse-paragraphs (content)
+  content)
+
 (defun markdown-to-html (markdown-content)
-  (-> markdown-content
-      parse-header
-      parse-paragraphs))
+  (div '(:class "flex flex-col")
+    (-> markdown-content
+	parse-header
+	parse-paragraphs)))
