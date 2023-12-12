@@ -69,7 +69,7 @@
 			       :integrity "sha384-QFjmbokDn2DjBjq+fM+8LUIVrAgqcNW2s0PjAxHETgRn9l4fvX31ZxDxvwQnyMOX"
 			       :crossorigin "anonymous"))
 		     (script '(:src "https://cdn.tailwindcss.com") ))
-		    (body '(:class "bg-slate-700") (generate-body inner)))))
+		    (body '(:class "bg-slate-700" :hx-boost "true") (generate-body inner)))))
 
 (defun main-handler (env)
   (let ((req-path  (getf env :path-info)))
