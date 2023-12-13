@@ -6,7 +6,7 @@
     (car (cl-ppcre:split "_" filename)))))
 
 (defun get-post-files ()
-  (loop for f in (directory "*.md")
+  (loop for f in (directory "../*.md")
 		 if (or
 		     (get-date-from-post-filename (file-namestring f))
 		     (cl-ppcre:scan "\.md$" (file-namestring f)))
@@ -24,18 +24,17 @@
 	 :accessor path)))
 
 
-
 (defun load-post (filename)
   (let* ((splitted (cl-ppcre:split "_" filename))
 	 (filename-without-ext (car (cl-ppcre:split "\\." (cadr splitted)))))
     (make-instance 'post
 		   :title (cl-ppcre:regex-replace-all "-" filename-without-ext " ")
 		   :date (local-time:parse-timestring (car splitted))
-		   :path filename-without-ext
+		   :path (string-downcase filename-without-ext)
 		   :content (format nil "~{~A~^~% ~}"
-				    (with-open-file (stream filename)
+				    (with-open-file (stream (concatenate 'string "../" filename))
 				      (loop for line = (read-line stream nil)
-					while line
+					    while line
 					    collect line))))))
 
 (defun get-posts ()
@@ -71,10 +70,10 @@
 
 
 (defun parse-paragraphs (content)
-  content)
+  (cl-ppcre:regex-replace-all "\\n[ ]*\\n" content "<br />"))
 
 (defun markdown-to-html (markdown-content)
-  (div '(:class "flex flex-col")
-    (-> markdown-content
-	parse-header
-	parse-paragraphs)))
+  (div '(:class "flex flex-col" :id "blog-content")
+       (-> markdown-content
+	   parse-header
+	   parse-paragraphs)))
