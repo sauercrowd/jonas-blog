@@ -82,7 +82,10 @@
 (defun get-matching-blog-post (req-path)
   (if (string= "/" req-path)
       ""
-      (content (gethash req-path *posts-table*))))
+      (let ((post (gethash req-path *posts-table*)))
+	(if post
+	    (content post)
+	    nil))))
 
 (defun main-handler (env)
   (let* ((req-path  (getf env :path-info))

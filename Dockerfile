@@ -11,6 +11,6 @@ RUN curl -O https://beta.quicklisp.org/quicklisp.lisp
 RUN sbcl --load quicklisp.lisp  \
         --eval "(quicklisp-quickstart:install)" \
         --eval '(ql:quickload "jonas-blog")' \
-        --eval "(quit)"
+        --quit
 
 CMD ["sbcl", "--non-interactive", "--load", "/root/quicklisp/setup.lisp", "--load", "./main.lisp"]

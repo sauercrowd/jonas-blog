@@ -6,7 +6,7 @@
     (car (cl-ppcre:split "_" filename)))))
 
 (defun get-post-files ()
-  (loop for f in (directory "../*.md")
+  (loop for f in (directory (format nil "~a/*.md" (asdf:system-relative-pathname :jonas-blog ".")))
 		 if (or
 		     (get-date-from-post-filename (file-namestring f))
 		     (cl-ppcre:scan "\.md$" (file-namestring f)))
@@ -32,7 +32,7 @@
 		   :date (local-time:parse-timestring (car splitted))
 		   :path (string-downcase filename-without-ext)
 		   :content (format nil "~{~A~^~% ~}"
-				    (with-open-file (stream (concatenate 'string "../" filename))
+				    (with-open-file (stream (asdf:system-relative-pathname :jonas-blog filename))
 				      (loop for line = (read-line stream nil)
 					    while line
 					    collect line))))))
