@@ -6,6 +6,6 @@
   :components ((:module "src"
                 :components
                 ((:file "package")
-		 (:file "jonas-blog")
-                 (:file "markdown"))))
+                 (:file "markdown")
+		 (:file "jonas-blog"))))
   :description "")
