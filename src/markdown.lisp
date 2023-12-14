@@ -78,7 +78,8 @@
 (defun parse-images (content)
   (cl-ppcre:regex-replace-all "!\\[(.*)\\]\\((.*)\\)" content
 			      (lambda (match &rest registers)
-				(img `(:class "rounded-sm max-w-[512px] max-h-[512px]" :src ,(cadr registers) :alt ,(car registers)))) :simple-calls t))
+				(div
+				 (img `(:class "rounded-sm max-w-[512px] max-h-[512px]" :src ,(cadr registers) :alt ,(car registers))))) :simple-calls t))
 
 (defun markdown-to-html (markdown-content)
   (div '(:class "flex flex-col" :id "blog-content")

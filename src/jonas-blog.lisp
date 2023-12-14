@@ -124,8 +124,8 @@
 	    (maybe-post (get-matching-blog-post req-path)))
     (if maybe-post
 	(if is-htmx-req
-	    `(200 '(:content-type "text/html") (,(markdown-to-html maybe-post)))
-	    `(200 '(:content-type "text/html") (,(get-blog (markdown-to-html maybe-post)))))
+	    `(200 (:content-type "text/html") (,(markdown-to-html maybe-post)))
+	    `(200 (:content-type "text/html") (,(get-blog (markdown-to-html maybe-post)))))
 	(serve-static-asset env))))
 
 
