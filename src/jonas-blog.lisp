@@ -48,6 +48,7 @@
 			     :hx-swap "innerHTML"
 			     :hx-target "#blog-content"
 			     :hx-push-url "true"
+			     :href (format nil "/~a" (path post))
 			     :hx-get (format nil "/~a" (path post)))
 			    (title post)))
 		       (get-posts))))
