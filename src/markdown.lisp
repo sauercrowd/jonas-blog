@@ -60,7 +60,7 @@
 			      (lambda (match &rest registers)
 				(let ((header-size (car registers))
 				      (header-content (cadr registers)))
-				  (cond ((string= header-size "#") (h1 '(:class "text-3xl mt-2") header-content))
+				  (cond ((string= header-size "#") (h1 '(:class "text-3xl mt-4") header-content))
 					((string= header-size "##") (h2 '(:class "text-2xl mt-2") header-content))
 					((string= header-size "###") (h3 '(:class "text-xl mt-2") header-content))
 					(t (b header-content)))))
@@ -73,18 +73,35 @@
 (defun parse-links (content)
   (cl-ppcre:regex-replace-all " \\[(.*)\\]\\((.*)\\)" content
 			      (lambda (match &rest registers)
-				(a `(:href ,(cadr registers)) (car registers))) :simple-calls t))
+				(a `(:class "mx-1 underline" :href ,(cadr registers)) (car registers))) :simple-calls t))
 
 (defun parse-images (content)
-  (cl-ppcre:regex-replace-all "!\\[(.*)\\]\\((.*)\\)" content
+  (cl-ppcre:regex-replace-all " !\\[(.*)\\]\\((.*)\\)" content
 			      (lambda (match &rest registers)
 				(div
 				 (img `(:class "rounded-sm max-w-[512px] max-h-[512px]" :src ,(cadr registers) :alt ,(car registers))))) :simple-calls t))
 
+
+(defun parse-inline-code (content)
+  (cl-ppcre:regex-replace-all "[\\s]`(.*?)`" content
+			      (lambda (match &rest registers)
+				(span '(:class "m-1 rounded-sm bg-slate-100 text-black p-1") (car registers)))
+			      :simple-calls t))
+
+(defun parse-code-blocks (content)
+  (cl-ppcre:regex-replace-all (create-scanner "```.*?\\n((?:.|\\s)*?)```"  :multi-line-mode t) content
+			      (lambda (match &rest registers)
+				(div '(:class "m-1 rounded-sm bg-slate-100 text-black p-1") (car registers)))
+			      :simple-calls t))
+  
+  
+
 (defun markdown-to-html (markdown-content)
-  (div '(:class "flex flex-col" :id "blog-content")
+  (div '(:class "max-w-[1024px]" :id "blog-content")
        (-> markdown-content
-	   parse-header
-	   parse-images
+	   parse-code-blocks
+	   parse-inline-code
 	   parse-links
+	   parse-images
+	   parse-header
 	   parse-paragraphs)))

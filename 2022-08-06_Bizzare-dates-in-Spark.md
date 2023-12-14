@@ -1,14 +1,8 @@
----
-title: "The bizzare world of parsing dates in Spark 2"
-date: 2022-08-06T00:00:00+01:00
-draft: false
----
+# The bizzare world of parsing dates in Spark
 
-_Note: I originally [tweeted this into the void](https://twitter.com/thinanchor/status/1555675061398413312)_
+Dates are famously hard to work with, but it turns out dates are even harder in Spark
 
-Dates are famously one of the easiest things in software engineering, but Spark 2 added a cherry on the top.
-
-### The numbers are off... but just slightly.
+## The numbers are off... but just slightly.
 
 When I first stumbled across this it wasn't one of the bugs that just scream in your face - it was subtle.
 Something didn't add up, and after a lot of digging it became clear that things didn't add up around the year mark - repeatedly, but weirdly enough
@@ -16,7 +10,7 @@ sometimes affecting a few days in December, and in other cases affecting a few d
 
 Nothing unusal in the code, no warnings in the output - so what's going on?
 
-### Date parsing in Spark
+## Date parsing in Spark
 
 Let's first look at an example. We're just gonna parse some dates from strings in Spark, that can't be too hard.
 
@@ -29,7 +23,7 @@ If we change the year placeholder from `YYYY` to `yyyy` things look like we want
 ![](/static/sparkDatesRight.png)
 
 
-### Y isn't y... most of the times
+## Y isn't y... most of the times
 
 Clearly Y is at fault here, but what on earth does it do?
 
@@ -53,9 +47,7 @@ Now, funnily enough, Python uses the `Y` in it's date format to a regular year, 
 
 ![](/static/Screenshot from 2022-08-05 22-55-08.png)
 
-Dates am I right
-
-### Spark 3
+## Spark 3
 
 Luckily! This is no longer the case with Spark 3. Spark 3 now implements it's own date parser, and the behaviour described above
 is only possible if explicitely enabled.

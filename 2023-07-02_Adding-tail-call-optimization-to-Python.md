@@ -1,8 +1,4 @@
----
-title: "Adding tail call optimization to Python"
-date: 2023-07-02T18:21:00+02:00
-draft: false
----
+# Adding tail call optimization to Python
 
 [Tail call optimization](https://stackoverflow.com/questions/310974/what-is-tail-call-optimization) is a great feature. It's obviously easier to solve recursive problems recursively rather than iteratively.
 It's a shame it's not available in Python (or many other languages), so let's add it.

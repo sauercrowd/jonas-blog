@@ -1,8 +1,4 @@
----
-title: "Fixing Bluetooth on Fedora 35"
-date: 2022-03-17T22:00:00+01:00
-draft: false
----
+# Fixing Bluetooth on Fedora 35
 
 After updating Fedora, I ended up with a dysfunctional bluetooth - (again?).
 

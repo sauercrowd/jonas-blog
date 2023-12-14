@@ -1,10 +1,5 @@
----
-title: "Openconnect without getting annoyed"
-date: 2017-08-09T14:56:14+02:00
-draft: false
----
+# Openconnect without getting annoyed
 
-# Intro
 
 I need to use opennecect, an opensource implementation for Cisco Anyconnect VPN, for my work, and it doesn't really work that well.
 Usually some sites are really slow or not load at all when using Ciscos Anyconnect, so why not make life easier by putting that into a docker container.

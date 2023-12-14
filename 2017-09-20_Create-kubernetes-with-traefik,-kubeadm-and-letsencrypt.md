@@ -1,8 +1,5 @@
----
-title: "Automate deployments with Kubernetes using Kubeadm, LetsEncrypt and Traefik"
-date: 2017-09-20T22:11:35+02:00
-draft: false
----
+# Automate deployments with Kubernetes using Kubeadm, LetsEncrypt and Traefik
+
 ## Introduction
 
 I'm wanted to have a functional Kubernetes cluster since I first heard about Kubernetes (which might 1,5 years ago), but I never really had the prerequisities to start (server, domain).
@@ -184,13 +181,13 @@ Chrome:
  - Tools->Tools > Options > Advanced > Certificates: View Certificates->Your Certificates
 
  Try if you're able to reach your cluster by heading to `https://SERVER_IP:6443`
- 
+
  If everything worked out, you should be asked by your Browser which certificate you would wan't to use, select the one we just imported.
 
  And you should get a JSON with a bunch of API paths.
 
  ## Deploy the Kubernetes Dashboard
- 
+
  As you might already know, deployment is easy.
 
  Execute

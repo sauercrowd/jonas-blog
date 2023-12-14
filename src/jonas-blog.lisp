@@ -33,7 +33,7 @@
      ,@(loop for tag in tag-list
 	      collect `(create-html-tag ,tag))))
 
-(create-html-tags ("h1" "h2" "h3" "html" "script" "img" "a" "head" "body" "meta" "div" "span" "p" "b" "link"))
+(create-html-tags ("h1" "h2" "h3" "html" "script" "img" "a" "head" "body" "meta" "div" "span" "p" "b" "link" "nav"))
 
 
 (defun concat-string-list (str-list)
@@ -42,15 +42,16 @@
 (defun sidebar-show-posts ()
   (concat-string-list
 	       (mapcar (lambda (post)
-			 (a (list
-			     :class "underline"
-			     :hx-trigger "click"
-			     :hx-swap "innerHTML"
-			     :hx-target "#blog-content"
-			     :hx-push-url "true"
-			     :href (format nil "/~a" (path post))
-			     :hx-get (format nil "/~a" (path post)))
-			    (title post)))
+			 (div
+			  (a (list
+			      :class "underline"
+			      :hx-trigger "click"
+			      :hx-swap "innerHTML"
+			      :hx-target "#blog-content"
+			      :hx-push-url "true"
+			      :href (format nil "/~a" (path post))
+			      :hx-get (format nil "/~a" (path post)))
+			     (title post))))
 		       (get-posts))))
 
 (defun generate-body (inner)
@@ -63,8 +64,9 @@
 	 "Software engineer at "
 	    (a '(:class "underline" :href "https://loxoapp.com") "Loxo")
 	    " previously at " (a '(:class "underline" :href "https://palantir.com") "Palantir"))
-	(sidebar-show-posts))
-       inner))
+	(nav '(:class "mt-8 gap-2 flex flex-col")
+	 (sidebar-show-posts)))
+       (div '(:class "flex overflow-x-auto justify-center w-full") inner)))
 
 (defun get-blog (inner)
       (concatenate 'string
