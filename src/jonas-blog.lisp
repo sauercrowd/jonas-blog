@@ -43,14 +43,12 @@
   (concat-string-list
 	       (mapcar (lambda (post)
 			 (a (list
-			     :class "underline cursor-pointer hover:text-slate-100"
+			     :class "underline"
 			     :hx-trigger "click"
 			     :hx-swap "innerHTML"
 			     :hx-target "#blog-content"
 			     :hx-push-url "true"
-			     :hx-get (format nil "/~a" (path post))
-			     :href (format nil "/~a" (path post))
-			     )
+			     :hx-get (format nil "/~a" (path post)))
 			    (title post)))
 		       (get-posts))))
 
@@ -74,9 +72,10 @@
 		    (head
 		     (meta '(:charset "utf8"))
 		     (meta '(:name "viewport" :content "width=device-width, initial-scale=1.0"))
+		     (script '(:src "https://unpkg.com/idiomorph/dist/idiomorph-ext.min.js"))
 		     (script '(:src "/static/htmx.min.js"))
 		     (link '(:type "text/css" :href "/static/tailwind.css" :rel "stylesheet" )))
-		    (body '(:class "bg-slate-700" :hx-boost "true")
+		    (body '(:class "bg-slate-700" :hx-boost "true" :hx-ext "morph")
 			  (generate-body inner)))))
 
 (defun get-matching-blog-post (req-path)
