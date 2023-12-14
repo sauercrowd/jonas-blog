@@ -46,8 +46,6 @@
       (setf (gethash (format nil "/~a" (path post)) posts-table) post))
     posts-table))
 
-(defvar *posts-table* nil)
-(setf *posts-table* (get-posts-table))
 
 
 (defmacro -> (&rest args)
@@ -57,14 +55,14 @@
 
 
 (defun parse-header (content)
-  (cl-ppcre:regex-replace-all "^[ ]*(#+) (.*)"
+  (cl-ppcre:regex-replace-all "[ ]*(#+) (.*)"
 			      content
 			      (lambda (match &rest registers)
 				(let ((header-size (car registers))
 				      (header-content (cadr registers)))
-				  (cond ((string= header-size "#") (h1 '(:class "text-3xl") header-content))
-					((string= header-size "##") (h2 '(:class "text-2xl") header-content))
-					((string= header-size "###") (h3 '(:class "text-xl") header-content))
+				  (cond ((string= header-size "#") (h1 '(:class "text-3xl mt-2") header-content))
+					((string= header-size "##") (h2 '(:class "text-2xl mt-2") header-content))
+					((string= header-size "###") (h3 '(:class "text-xl mt-2") header-content))
 					(t (b header-content)))))
 			      :simple-calls t))
 
@@ -72,8 +70,20 @@
 (defun parse-paragraphs (content)
   (cl-ppcre:regex-replace-all "\\n[ ]*\\n" content "<br />"))
 
+(defun parse-links (content)
+  (cl-ppcre:regex-replace-all " \\[(.*)\\]\\((.*)\\)" content
+			      (lambda (match &rest registers)
+				(a `(:href ,(cadr registers)) (car registers))) :simple-calls t))
+
+(defun parse-images (content)
+  (cl-ppcre:regex-replace-all "!\\[(.*)\\]\\((.*)\\)" content
+			      (lambda (match &rest registers)
+				(img `(:class "rounded-sm max-w-[512px] max-h-[512px]" :src ,(cadr registers) :alt ,(car registers)))) :simple-calls t))
+
 (defun markdown-to-html (markdown-content)
   (div '(:class "flex flex-col" :id "blog-content")
        (-> markdown-content
 	   parse-header
+	   parse-images
+	   parse-links
 	   parse-paragraphs)))

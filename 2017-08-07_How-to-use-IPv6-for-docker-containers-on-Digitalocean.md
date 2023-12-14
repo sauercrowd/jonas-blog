@@ -3,7 +3,7 @@ title: "How to use IPv6 for docker containers on Digitalocean"
 date: 2017-08-07T22:17:57+02:00
 draft: false
 ---
- 
+
 You get ipv6 adrresses on digitalocean for free, so why not give your containers an address which is reachable from everywhere in the world?
 
 # A few words
@@ -21,11 +21,11 @@ You could read more about NDP Proxying [here](https://docs.docker.com/engine/use
 First, create a new droplet. I use the smallest kind of droplet, but every kind should work.
 Just make sure you activate ipv6.
 
-![](/images/ipv6-docker-do/create-droplet.png)
+![](/static/create-droplet.png)
 
 After creating, it should look somewhat like that on the DO page:
 
-![](/images/ipv6-docker-do/droplet-view.png)
+![](/static/droplet-view.png)
 
 ## Setting up your droplet
 

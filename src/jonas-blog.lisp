@@ -33,7 +33,7 @@
      ,@(loop for tag in tag-list
 	      collect `(create-html-tag ,tag))))
 
-(create-html-tags ("h1" "h2" "h3" "html" "script" "img" "a" "head" "body" "meta" "div" "span" "p" "b"))
+(create-html-tags ("h1" "h2" "h3" "html" "script" "img" "a" "head" "body" "meta" "div" "span" "p" "b" "link"))
 
 
 (defun concat-string-list (str-list)
@@ -71,12 +71,9 @@
 		    (head
 		     (meta '(:charset "utf8"))
 		     (meta '(:name "viewport" :content "width=device-width, initial-scale=1.0"))
-		     (script '(:src "https://unpkg.com/htmx.org@1.9.9"
-			       :integrity "sha384-QFjmbokDn2DjBjq+fM+8LUIVrAgqcNW2s0PjAxHETgRn9l4fvX31ZxDxvwQnyMOX"
-			       :crossorigin "anonymous"))
-		     (script '(:src "https://cdn.tailwindcss.com") ))
-		     (script '(:src "https://unpkg.com/idiomorph/dist/idiomorph-ext.min.js"))
-		    (body '(:class "bg-slate-700" :hx-boost "true" :hx-ext "morph")
+		     (script '(:src "/static/htmx.min.js"))
+		     (link '(:type "text/css" :href "/static/tailwind.css" :rel "stylesheet" )))
+		    (body '(:class "bg-slate-700" :hx-boost "true")
 			  (generate-body inner)))))
 
 (defun get-matching-blog-post (req-path)
@@ -87,20 +84,60 @@
 	    (content post)
 	    nil))))
 
-(defun main-handler (env)
+
+(defun read-static-file (path)
+  (with-open-file (file path :element-type '(unsigned-byte 8))
+  (let ((data (make-array (file-length file) :element-type '(unsigned-byte 8))))
+    (read-sequence data file)
+    data)))
+ 
+
+(defun get-static-assets ()
+    (loop for f in (directory (format nil "~a/static/*.*" (asdf:system-relative-pathname :jonas-blog ".")))
+	  collect
+	    (list (concatenate 'string "/" (subseq
+		   (namestring f)
+		   (length
+		    (namestring
+		     (asdf:system-relative-pathname :jonas-blog "")))))
+		  (read-static-file f))))
+
+
+(defun get-static-asset-table ()
+    (let ((static-item-table (make-hash-table :test 'equal)))
+	(dolist (item (get-static-assets))
+	(setf (gethash (car item) static-item-table) (cadr item)))
+	static-item-table))
+
+
+(defun serve-static-asset (env)
   (let* ((req-path  (getf env :path-info))
-	 (is-htmx-req (gethash "hx-request"(getf env :headers)))
-	 (maybe-post (get-matching-blog-post req-path)))
+	 (static-asset (gethash req-path *static-assets*)))
+    (if static-asset
+	`(200 () ,static-asset) 
+	'(404 (:content-type "text-plain") ("Not found")))))
+
+
+(defun main-handler (env)
+    (let* ((req-path  (getf env :path-info))
+	    (is-htmx-req (gethash "hx-request"(getf env :headers)))
+	    (maybe-post (get-matching-blog-post req-path)))
     (if maybe-post
 	(if is-htmx-req
 	    `(200 '(:content-type "text/html") (,(markdown-to-html maybe-post)))
 	    `(200 '(:content-type "text/html") (,(get-blog (markdown-to-html maybe-post)))))
-	'(404 (:content-type "text/plain") ("Not found")))))
+	(serve-static-asset env))))
 
 
 
 (defvar *app* (lambda (env)
 		(main-handler env)))
+
+(defvar *posts-table* nil)
+(defvar *static-assets* nil)
+
+(setf *static-assets* (get-static-asset-table))
+(setf *posts-table* (get-posts-table))
 
 (defun main ()
   (woo:run *app* :port 8080 :address "0.0.0.0"))
