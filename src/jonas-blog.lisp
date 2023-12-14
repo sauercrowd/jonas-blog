@@ -43,10 +43,11 @@
   (concat-string-list
 	       (mapcar (lambda (post)
 			 (a (list
-			     :class "underline"
+			     :class "underline cursor-pointer hover:text-slate-100"
 			     :hx-trigger "click"
 			     :hx-swap "innerHTML"
 			     :hx-target "#blog-content"
+			     :hx-push-url "true"
 			     :hx-get (format nil "/~a" (path post)))
 			    (title post)))
 		       (get-posts))))
