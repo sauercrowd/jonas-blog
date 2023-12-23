@@ -91,17 +91,18 @@
 (defun parse-code-blocks (content)
   (cl-ppcre:regex-replace-all (create-scanner "```.*?\\n((?:.|\\s)*?)```"  :multi-line-mode t) content
 			      (lambda (match &rest registers)
-				(pre '(:class "pt-8 pb-8 bg-slate-200 rounded m-1") (code '(:class "text-black p-1") (car registers))))
+				(pre '(:class "mt-2 text-sm pt-1 pb-1 bg-slate-200 rounded m-1") (code '(:class "text-black p-1") (car registers))))
 			      :simple-calls t))
   
   
 
 (defun markdown-to-html (markdown-content)
   (div '(:class "max-w-[1024px]" :id "blog-content")
-       (-> markdown-content
-	   parse-code-blocks
-	   parse-inline-code
-	   parse-links
-	   parse-images
-	   parse-header
-	   parse-paragraphs)))
+       (div '(:class "pt-2 pb-4")
+	(-> markdown-content
+	    parse-code-blocks
+	    parse-inline-code
+	    parse-links
+	    parse-images
+	    parse-header
+	    parse-paragraphs))))
