@@ -91,7 +91,7 @@
 (defun parse-code-blocks (content)
   (cl-ppcre:regex-replace-all (create-scanner "```.*?\\n((?:.|\\s)*?)```"  :multi-line-mode t) content
 			      (lambda (match &rest registers)
-				(div '(:class "m-1 rounded-sm bg-slate-100 text-black p-1") (car registers)))
+				(pre '(:class "pt-8 pb-8 bg-slate-200 rounded m-1") (code '(:class "text-black p-1") (car registers))))
 			      :simple-calls t))
   
   
