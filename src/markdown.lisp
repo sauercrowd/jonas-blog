@@ -60,9 +60,9 @@
 			      (lambda (match &rest registers)
 				(let ((header-size (car registers))
 				      (header-content (cadr registers)))
-				  (cond ((string= header-size "#") (h1 '(:class "text-3xl mt-4") header-content))
-					((string= header-size "##") (h2 '(:class "text-2xl mt-2") header-content))
-					((string= header-size "###") (h3 '(:class "text-xl mt-2") header-content))
+				  (cond ((string= header-size "#") (h1 '(:class "text-3xl mt-8") header-content))
+					((string= header-size "##") (h2 '(:class "text-2xl mt-8") header-content))
+					((string= header-size "###") (h3 '(:class "text-xl mt-8") header-content))
 					(t (b header-content)))))
 			      :simple-calls t))
 
@@ -98,11 +98,17 @@
 
 (defun markdown-to-html (markdown-content)
   (div '(:class "max-w-[1024px]" :id "blog-content")
+       (concatenate 'string "<title>"
+		    (if (stringp markdown-content)
+			""
+			(title markdown-content))
+		    "</title>")
        (div '(:class "pt-2 pb-4")
-	(-> markdown-content
-	    parse-code-blocks
-	    parse-inline-code
-	    parse-links
-	    parse-images
-	    parse-header
-	    parse-paragraphs))))
+	    (-> markdown-content
+		content
+		parse-code-blocks
+		parse-inline-code
+		parse-links
+		parse-images
+		parse-header
+		parse-paragraphs))))

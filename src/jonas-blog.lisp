@@ -1,7 +1,5 @@
 (in-package :jonas-blog)
 
-(defun hello (args))
-
 (defun content-to-string (content)
   (if (stringp content)
       content
@@ -79,8 +77,7 @@
                      (meta '(:name "viewport" :content "width=device-width, initial-scale=1.0"))
                      (script '(:src "https://unpkg.com/idiomorph/dist/idiomorph-ext.min.js"))
                      (script '(:src "/static/htmx.min.js"))
-		     (script '(:src  "https://cdn.tailwindcss.com"))
-                     (link '(:type "text/css" :href "/static/tailwind.css" :rel "stylesheet")))
+		     (script '(:src  "/static/tailwindcss.dev.js")))
                     (body '(:class "bg-slate-700" :hx-boost "true" :hx-ext "morph")
                           (generate-body inner)))))
 
@@ -88,9 +85,7 @@
   (if (string= "/" req-path)
       ""
       (let ((post (gethash req-path *posts-table*)))
-        (if post
-            (content post)
-            nil))))
+        post)))
 
 
 (defun read-static-file (path)
