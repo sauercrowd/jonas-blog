@@ -66,7 +66,7 @@
             " previously at " (a '(:class "underline" :href "https://palantir.com") "Palantir"))
         (nav '(:class "mt-8 gap-2 flex flex-col")
          (sidebar-show-posts)))
-       (main (div '(:class "flex overflow-x-auto justify-center w-full") inner))))
+       (main '(:class "flex overflow-x-auto justify-center w-full") inner)))
 
 (defun get-blog (inner)
       (concatenate 'string
