@@ -109,9 +109,10 @@
 (defun markdown-to-html (markdown-content)
   (div '(:class "max-w-[1024px]" :id "blog-content")
        (concatenate 'string "<title>"
-		    (if (stringp markdown-content)
-			""
-			(title markdown-content))
+		    (concatenate 'string "Jonas Blog | "
+				 (if (stringp markdown-content)
+				     ""
+				     (title markdown-content)))
 		    "</title>")
        (div '(:class "pt-2 pb-4")
 	    (-> (if (stringp markdown-content)
