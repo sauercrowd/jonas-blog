@@ -33,7 +33,7 @@
      ,@(loop for tag in tag-list
               collect `(create-html-tag ,tag))))
 
-(create-html-tags ("h1" "h2" "h3" "html" "script" "img" "a" "head" "body" "meta" "div" "span" "p" "b" "link" "nav" "code" "pre" "main"))
+(create-html-tags ("h1" "h2" "h3" "html" "script" "img" "a" "head" "body" "meta" "div" "span" "p" "b" "link" "nav" "code" "pre" "main" "italic" "bold"))
 
 
 (defun concat-string-list (str-list)

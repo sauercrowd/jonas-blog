@@ -93,7 +93,17 @@
 			      (lambda (match &rest registers)
 				(pre '(:class "mt-2 overflow-hidden whitespace-break-spaces text-sm pt-1 pb-1 bg-slate-200 rounded m-1") (code '(:class "text-black p-1") (car registers))))
 			      :simple-calls t))
+
+
+(defun parse-italic (content)
+  (cl-ppcre:regex-replace-all "_(.*?)_" content
+			      (lambda (match &rest registers)
+				(italic '(:class "") (car registers)))))
   
+(defun parse-bold (content)
+  (cl-ppcre:regex-replace-all "\\*(.*?)\\*" content
+			      (lambda (match &rest registers)
+				(bold '(:class "") (car registers)))))
   
 
 (defun markdown-to-html (markdown-content)
@@ -112,4 +122,6 @@
 		parse-links
 		parse-images
 		parse-header
+		parse-italic
+		parse-bold
 		parse-paragraphs))))
