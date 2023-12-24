@@ -1,2 +1,2 @@
 (ql:quickload "jonas-blog")
-(jonas-blog:main)
+(jonas-blog:main-fn)

@@ -91,7 +91,7 @@
 (defun parse-code-blocks (content)
   (cl-ppcre:regex-replace-all (create-scanner "```.*?\\n((?:.|\\s)*?)```"  :multi-line-mode t) content
 			      (lambda (match &rest registers)
-				(pre '(:class "mt-2 text-sm pt-1 pb-1 bg-slate-200 rounded m-1") (code '(:class "text-black p-1") (car registers))))
+				(pre '(:class "mt-2 overflow-hidden whitespace-break-spaces text-sm pt-1 pb-1 bg-slate-200 rounded m-1") (code '(:class "text-black p-1") (car registers))))
 			      :simple-calls t))
   
   
@@ -104,8 +104,9 @@
 			(title markdown-content))
 		    "</title>")
        (div '(:class "pt-2 pb-4")
-	    (-> markdown-content
-		content
+	    (-> (if (stringp markdown-content)
+		    ""
+		    (content markdown-content))
 		parse-code-blocks
 		parse-inline-code
 		parse-links

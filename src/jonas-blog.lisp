@@ -33,7 +33,7 @@
      ,@(loop for tag in tag-list
               collect `(create-html-tag ,tag))))
 
-(create-html-tags ("h1" "h2" "h3" "html" "script" "img" "a" "head" "body" "meta" "div" "span" "p" "b" "link" "nav" "code" "pre"))
+(create-html-tags ("h1" "h2" "h3" "html" "script" "img" "a" "head" "body" "meta" "div" "span" "p" "b" "link" "nav" "code" "pre" "main"))
 
 
 (defun concat-string-list (str-list)
@@ -66,7 +66,7 @@
             " previously at " (a '(:class "underline" :href "https://palantir.com") "Palantir"))
         (nav '(:class "mt-8 gap-2 flex flex-col")
          (sidebar-show-posts)))
-       (div '(:class "flex overflow-x-auto justify-center w-full") inner)))
+       (main (div '(:class "flex overflow-x-auto justify-center w-full") inner))))
 
 (defun get-blog (inner)
       (concatenate 'string
@@ -75,7 +75,7 @@
                     (head
                      (meta '(:charset "utf8"))
                      (meta '(:name "viewport" :content "width=device-width, initial-scale=1.0"))
-                     (script '(:src "https://unpkg.com/idiomorph/dist/idiomorph-ext.min.js"))
+                     (script '(:src "/static/idiomorph-ext.min.js"))
                      (script '(:src "/static/htmx.min.js"))
 		     (script '(:src  "/static/tailwindcss.dev.js")))
                     (body '(:class "bg-slate-700" :hx-boost "true" :hx-ext "morph")
@@ -142,10 +142,10 @@
 (setf *static-assets* (get-static-asset-table))
 (setf *posts-table* (get-posts-table))
 
-(defun main ()
+(defun main-fn ()
   (woo:run *app* :port 8080 :address "0.0.0.0"))
 
 (defun dev ()
   (require 'bordeaux-threads)
   (bt:make-thread (lambda ()
-                    (main))))
+                    (main-fn))))
