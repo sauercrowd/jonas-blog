@@ -2,7 +2,7 @@
   :version "0.1.0"
   :author "Jonas Otten"
   :license ""
-  :depends-on (:woo :local-time :cl-ppcre)
+  :depends-on (:woo :local-time :cl-ppcre :sqlite :sb-md5)
   :components ((:module "src"
                 :components
                 ((:file "package")

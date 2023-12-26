@@ -132,6 +132,17 @@
          (serve-static-asset env))))
 
 
+(defvar *db* (connect ":memory"))
+
+(execute-non-query *db* "create table if not exists post_reads 
+    (path text, ip_hash text,
+     PRIMARY KEY(path, ip_hash))")
+
+
+(defun track-ip-read (path ip-address)
+  (execute-non-query *db* "insert into post_reads (path, ip_hash) VALUES(?, ?)"
+		     (path (md5sum-string ip-address))))
+
 
 (defvar *app* (lambda (env)
                 (main-handler env)))
