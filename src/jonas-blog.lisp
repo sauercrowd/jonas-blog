@@ -122,14 +122,16 @@
 
 
 (defun main-handler (env)
-    (let* ((req-path  (getf env :path-info))
-           (is-htmx-req (gethash "hx-request"(getf env :headers)))
-           (maybe-post (get-matching-blog-post req-path)))
-     (if maybe-post
-         (if is-htmx-req
-             `(200 (:content-type "text/html") (,(markdown-to-html maybe-post)))
-             `(200 (:content-type "text/html") (,(get-blog (markdown-to-html maybe-post)))))
-         (serve-static-asset env))))
+(track-ip-read req-path (gethash "Fly-Client-IP" (getf env :headers)))
+  (let* ((req-path  (getf env :path-info))
+         (is-htmx-req (gethash "hx-request"(getf env :headers)))
+         (maybe-post (get-matching-blog-post req-path))
+	 (post-view-count (get-post-count req-path)))
+    (if maybe-post
+        (if is-htmx-req
+            `(200 (:content-type "text/html") (,(markdown-to-html maybe-post )))
+            `(200 (:content-type "text/html") (,(get-blog (markdown-to-html maybe-post)))))
+        (serve-static-asset env))))
 
 
 (defvar *db* (connect ":memory"))
@@ -143,6 +145,9 @@
   (execute-non-query *db* "insert into post_reads (path, ip_hash) VALUES(?, ?)"
 		     (path (md5sum-string ip-address))))
 
+
+(defun get-post-count (path)
+  (execute-single *db* "SELECT COUNT(*) FROM post_reads WHERE path=?" path))
 
 (defvar *app* (lambda (env)
                 (main-handler env)))
