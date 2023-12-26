@@ -15,5 +15,5 @@ RUN sbcl --load quicklisp.lisp  \
     --quit
 
 USER root
-ENTRYPOINT litefs mount
+ENTRYPOINT litefs mount -config ./litefs.yml
 # CMD ["sbcl", "--non-interactive", "--load", "/root/quicklisp/setup.lisp", "--load", "./main.lisp"]
