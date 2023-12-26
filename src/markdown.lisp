@@ -115,7 +115,7 @@
 				     (title markdown-content)))
 		    "</title>")
        (div '(:class "pt-2 pb-4 relative")
-	    (div '(:class "absolute right-2 top-4 bg-white p-1 text-black")
+	    (div '(:class "absolute right-2 top-8 bg-white p-1 text-black")
 		 (div '(:class "text-xs") "Visitors")
 		 post-read-count)
 	    (-> (if (stringp markdown-content)
