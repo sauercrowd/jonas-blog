@@ -10,6 +10,7 @@
       k
       (string-downcase (symbol-name k))))
 
+
 (defun create-tags (args)
   (let* ((k (car args))
          (remaining-list (cdr args))
@@ -19,13 +20,12 @@
                                                             (cdr remaining-list)))
         "")))
 
-
 (defmacro create-html-tag (name)
   (let ((fn-name (read-from-string name)))
-   `(defun ,fn-name (&rest args)
-      (if (stringp (car args))
-         (format nil "<~a>~a</~a>" ,name (content-to-string args)  ,name)
-         (format nil "<~a ~a>~a</~a>" ,name (create-tags (car args)) (content-to-string (cdr args))  ,name)))))
+    `(defun ,fn-name (&rest args)
+       (if (stringp (car args))
+           (format nil "<~a>~a</~a>" ,name (content-to-string args)  ,name)
+           (format nil "<~a ~a>~a</~a>" ,name (create-tags (car args)) (content-to-string (cdr args))  ,name)))))
 
 
 (defmacro create-html-tags (tag-list)
@@ -77,7 +77,7 @@
                      (meta '(:name "viewport" :content "width=device-width, initial-scale=1.0"))
                      (script '(:src "/static/idiomorph-ext.min.js"))
                      (script '(:src "/static/htmx.min.js"))
-		     (script '(:src  "/static/tailwindcss.dev.js")))
+                     (script '(:src  "/static/tailwindcss.dev.js")))
                     (body '(:class "bg-slate-700" :hx-boost "true" :hx-ext "morph")
                           (generate-body inner)))))
 
@@ -123,10 +123,10 @@
 
 (defun main-handler (env)
   (let ((req-path (getf env :path-info)))
-    (track-ip-read req-path (gethash "Fly-Client-IP" (getf env :headers)))
+    (track-ip-read req-path (map 'string #'code-char (gethash "Fly-Client-IP" (getf env :headers))))
     (let ((is-htmx-req (gethash "hx-request" (getf env :headers)))
-            (maybe-post (get-matching-blog-post req-path))
-	    (post-view-count (get-post-count req-path)))
+          (maybe-post (get-matching-blog-post req-path))
+          (post-view-count (get-post-count req-path)))
       (if maybe-post
           (if is-htmx-req
               `(200 (:content-type "text/html") (,(markdown-to-html maybe-post post-view-count)))
@@ -135,7 +135,7 @@
 
 
 (if (uiop:getenv "FLY_APP_NAME")
-    (defvar *db* (connect "/litefs"))
+    (defvar *db* (connect "/litefs/main.db"))
     (defvar *db* (connect ":memory")))
 
 (execute-non-query *db* "create table if not exists post_reads 
@@ -144,8 +144,8 @@
 
 
 (defun track-ip-read (path ip-address)
-  (execute-non-query *db* "insert into post_reads (path, ip_hash) VALUES(?, ?)"
-		     (path (md5sum-string ip-address))))
+  (execute-non-query *db* "insert or ignore into post_reads (path, ip_hash) VALUES(?, ?)"
+                     path (sb-md5:md5sum-string (or ip-address ""))))
 
 
 (defun get-post-count (path)

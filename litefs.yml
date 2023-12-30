@@ -31,6 +31,16 @@ lease:
     # Change this if you are running multiple clusters in a single app!
     key: "${FLY_APP_NAME}/primary"
 
+proxy:
+  # Bind address for the proxy to listen on.
+  addr: ":8082"
+
+  # Hostport of your application - replace 8081 with whatever port
+  # your application is listening on!
+  target: "localhost:8080"
+
+  # Filename of the SQLite database you want to use for TXID tracking.
+  db: "main.db"
 
 exec:
   - cmd: sbcl --non-interactive --load /root/quicklisp/setup.lisp --load ./main.lisp

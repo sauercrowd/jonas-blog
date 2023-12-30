@@ -79,7 +79,7 @@
   (cl-ppcre:regex-replace-all " !\\[(.*)\\]\\((.*)\\)" content
 			      (lambda (match &rest registers)
 				(div
-				 (img `(:class "rounded-sm max-w-[512px] max-h-[512px]" :src ,(cadr registers) :alt ,(car registers))))) :simple-calls t))
+				 (img `(:class "my-2 rounded-sm max-w-[512px] max-h-[512px]" :src ,(cadr registers) :alt ,(car registers))))) :simple-calls t))
 
 
 (defun parse-inline-code (content)
